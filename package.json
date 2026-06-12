@@ -1,0 +1,12 @@
+{
+  "name": "kokoro-man-website",
+  "version": "1.0.0",
+  "description": "Kokoro Man — Sanker Ganesh artist website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

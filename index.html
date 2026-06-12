@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kokoro Man — Sanker Ganesh</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #ede8e0;
+    --linen: #1a1612;
+    --ochre: #8B6914;
+    --bone: #3a322a;
+    --mid: #d4cdc4;
+    --dim: #7a7268;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--linen);
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: linear-gradient(to bottom, rgba(13,13,11,0.55) 0%, transparent 100%);
+  }
+  .nav-logo {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e8e0d0;
+    text-decoration: none;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #e8e0d0;
+    text-decoration: none;
+    opacity: 0.85;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: #0d0d0b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-portrait {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    opacity: 1;
+    filter: grayscale(20%) contrast(1.1);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 40px 60px;
+    width: 100%;
+  }
+  .hero-name {
+    font-size: clamp(48px, 10vw, 120px);
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    color: #e8dcc8;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  .hero-name span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hero-name span:nth-child(2) { animation-delay: 0.15s; }
+  .hero-sub {
+    margin-top: 16px;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e8e0d0;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+    opacity: 0;
+    animation: fade 1s ease 0.8s forwards;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 28px;
+    right: 40px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+    opacity: 0;
+    animation: fade 1s ease 1.4s forwards;
+    writing-mode: vertical-rl;
+  }
+  @keyframes rise {
+    to { transform: translateY(0); }
+  }
+  @keyframes fade {
+    to { opacity: 1; }
+  }
+
+  /* SECTIONS */
+  section { padding: 120px 40px; }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--ochre);
+    opacity: 0.4;
+  }
+
+  /* INTRO */
+  #intro {
+    background: var(--ink);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+  .intro-text {
+    font-size: clamp(22px, 3vw, 32px);
+    line-height: 1.5;
+    font-weight: normal;
+    color: var(--linen);
+    opacity: 0.9;
+  }
+  .intro-text em {
+    color: var(--ochre);
+    font-style: normal;
+  }
+
+  /* WORK */
+  #work { background: var(--ink); padding: 80px 0; }
+  .work-header {
+    padding: 0 40px;
+    margin-bottom: 80px;
+  }
+  .work-title {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: normal;
+    letter-spacing: -0.02em;
+  }
+
+  /* EXHIBITION */
+  .exhibition {
+    margin-bottom: 140px;
+    padding: 0 40px;
+  }
+  .exhibition-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 40px;
+    border-top: 1px solid var(--mid);
+    padding-top: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .exhibition-name {
+    font-size: clamp(24px, 4vw, 48px);
+    font-weight: normal;
+    letter-spacing: -0.01em;
+  }
+  .exhibition-year {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ochre);
+    text-transform: uppercase;
+  }
+  .exhibition-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--bone);
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+  .paintings-grid {
+    display: grid;
+    gap: 3px;
+  }
+  .paintings-grid.two { grid-template-columns: 1fr 1fr; }
+  .paintings-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .paintings-grid.one { grid-template-columns: 1fr; }
+  .painting-item {
+    position: relative;
+    overflow: hidden;
+    background: var(--mid);
+    cursor: pointer;
+  }
+  .painting-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+    aspect-ratio: 1;
+  }
+  .painting-item:hover img { transform: scale(1.04); opacity: 0.85; }
+  .painting-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .painting-item:hover .painting-info { opacity: 1; }
+  .painting-title {
+    font-size: 13px;
+    color: var(--linen);
+    margin-bottom: 2px;
+  }
+  .painting-details {
+    font-size: 11px;
+    color: var(--bone);
+    letter-spacing: 0.05em;
+  }
+
+  /* Upcoming exhibition */
+  .upcoming-card {
+    border: 1px solid var(--mid);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .upcoming-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 12px;
+  }
+  .upcoming-title {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: normal;
+    margin-bottom: 8px;
+  }
+  .upcoming-date {
+    font-size: 13px;
+    color: var(--bone);
+    letter-spacing: 0.1em;
+  }
+  .upcoming-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--bone);
+    max-width: 400px;
+  }
+
+  /* ABOUT */
+  #about {
+    background: #e8e3db;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    padding: 120px 40px;
+  }
+  .about-image-wrap {
+    position: sticky;
+    top: 100px;
+  }
+  .about-image-wrap img {
+    width: 100%;
+    display: block;
+    filter: grayscale(15%) contrast(1.05);
+  }
+  .about-content { padding-top: 0; }
+  .about-name {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: normal;
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+  }
+  .about-bio {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--bone);
+    margin-bottom: 20px;
+  }
+  .about-cv {
+    margin-top: 48px;
+    border-top: 1px solid var(--mid);
+    padding-top: 32px;
+  }
+  .cv-section {
+    margin-bottom: 28px;
+  }
+  .cv-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 12px;
+  }
+  .cv-item {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--bone);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .cv-year {
+    color: var(--dim);
+    flex-shrink: 0;
+    width: 48px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* PRESS */
+  #press {
+    background: var(--ink);
+    padding: 120px 40px;
+  }
+  .press-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-top: 60px;
+  }
+  .press-card {
+    background: #e8e3db;
+    padding: 48px;
+    border: 1px solid var(--mid);
+    transition: border-color 0.2s;
+  }
+  .press-card:hover { border-color: var(--ochre); }
+  .press-pub {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 16px;
+  }
+  .press-headline {
+    font-size: clamp(18px, 2vw, 26px);
+    font-weight: normal;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .press-excerpt {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--bone);
+    margin-bottom: 20px;
+  }
+  .press-date {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* CONTACT */
+  #contact {
+    background: #ede8e0;
+    padding: 120px 40px;
+    text-align: center;
+  }
+  .contact-title {
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+    line-height: 1;
+  }
+  .contact-title em {
+    color: var(--ochre);
+    font-style: normal;
+  }
+  .contact-email {
+    font-size: clamp(16px, 2vw, 22px);
+    color: var(--linen);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ochre);
+    padding-bottom: 4px;
+    transition: color 0.2s;
+    display: inline-block;
+    margin-bottom: 48px;
+  }
+  .contact-email:hover { color: var(--ochre); }
+  .contact-social {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+  .contact-social a {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-social a:hover { color: var(--linen); }
+
+  /* FOOTER */
+  footer {
+    background: #ede8e0;
+    border-top: 1px solid var(--mid);
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* LIGHTBOX */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.95);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+  #lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-size: 28px;
+    color: var(--linen);
+    cursor: pointer;
+    background: none;
+    border: none;
+    opacity: 0.6;
+  }
+  #lightbox-close:hover { opacity: 1; }
+  #lightbox-caption {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: var(--bone);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 16px; }
+    section { padding: 80px 20px; }
+    #intro { padding: 80px 20px; }
+    #about { grid-template-columns: 1fr; gap: 40px; padding: 80px 20px; }
+    .about-image-wrap { position: static; }
+    .press-grid { grid-template-columns: 1fr; }
+    .paintings-grid.two, .paintings-grid.three { grid-template-columns: 1fr; }
+    .hero-content { padding: 0 20px 40px; }
+    .hero-scroll { display: none; }
+    .exhibition { padding: 0 20px; }
+    .work-header { padding: 0 20px; }
+    .upcoming-card { padding: 28px; }
+    footer { padding: 20px; }
+    #contact { padding: 80px 20px; }
+    #press { padding: 80px 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-name span, .hero-sub, .hero-scroll { animation: none; transform: none; opacity: 1; }
+  }
+
+  /* PAINTING SLIDER */
+  .slider-wrap {
+    position: relative;
+    user-select: none;
+    width: 100%;
+    overflow: hidden;
+  }
+  .slider-track {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 80px 48px;
+    box-sizing: border-box;
+  }
+  .slide-img-wrap {
+    width: 100%;
+    max-width: 700px;
+    background: #e8e3db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  .slide-img-wrap img {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    cursor: zoom-in;
+  }
+  .slide-caption {
+    margin-top: 28px;
+    text-align: center;
+    max-width: 700px;
+  }
+  .slide-title {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: normal;
+    letter-spacing: -0.01em;
+    color: var(--linen);
+    margin-bottom: 8px;
+  }
+  .slide-details {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .slider-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 8px;
+  }
+  .slider-btn {
+    background: none;
+    border: 1px solid var(--mid);
+    color: var(--bone);
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .slider-btn:hover { border-color: var(--ochre); color: var(--linen); }
+  .slider-count {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    min-width: 60px;
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .slide { padding: 0 20px 32px; }
+    .slide-img-wrap { padding: 20px; }
+  }
+
+  /* WALL GALLERY — Hockney style */
+  .wall-gallery {
+    background: #d4cec6;
+    padding: 60px 40px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 48px 56px;
+  }
+  .wall-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    max-width: 340px;
+    flex: 1 1 260px;
+  }
+  .wall-piece--wide {
+    flex: 1 1 100%;
+    max-width: 700px;
+  }
+  .wall-canvas {
+    background: #faf8f5;
+    padding: 16px;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.12),
+      0 4px 16px rgba(0,0,0,0.14),
+      0 12px 40px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .wall-piece:hover .wall-canvas {
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.15),
+      0 8px 28px rgba(0,0,0,0.18),
+      0 20px 56px rgba(0,0,0,0.14);
+    transform: translateY(-3px);
+  }
+  .wall-canvas img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+  }
+  .wall-canvas--wide img {
+    max-height: 320px;
+  }
+  .wall-label {
+    margin-top: 16px;
+    text-align: center;
+  }
+  .wall-title {
+    font-size: 13px;
+    color: #1a1612;
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+  }
+  .wall-details {
+    font-size: 11px;
+    color: #5a524a;
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 768px) {
+    .wall-gallery { padding: 32px 20px; gap: 40px 0; }
+    .wall-piece { max-width: 100%; flex: 1 1 100%; }
+  }
+    .paintings-grid.wall .painting-item { margin: 16px; }
+  }
+
+  /* THE WEIGHT — Preview */
+  .weight-preview {
+    margin-top: 0;
+    background: var(--ink);
+  }
+  .weight-detail {
+    position: relative;
+    cursor: zoom-in;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 40px 0;
+  }
+  .weight-detail img {
+    display: block;
+    max-width: 680px;
+    width: 100%;
+    height: auto;
+    transition: transform 0.6s ease;
+  }
+  .weight-detail:hover img { transform: scale(1.01); }
+  .weight-detail-caption {
+    max-width: 680px;
+    width: 100%;
+    padding: 24px 0 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .weight-detail-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    border: 1px solid var(--ochre);
+    padding: 4px 10px;
+    flex-shrink: 0;
+  }
+  .weight-detail-note {
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    color: #1a1612;
+    font-style: italic;
+  }
+  .weight-studies-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 48px 40px 8px;
+  }
+  .weight-studies {
+    background: #d4cec6;
+    padding: 40px 40px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px 48px;
+  }
+  .weight-study {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    flex: 1 1 240px;
+    max-width: 300px;
+  }
+  .weight-study .wall-canvas img {
+    max-height: 300px;
+  }
+  @media (max-width: 768px) {
+    .weight-detail { padding: 32px 20px 0; }
+    .weight-detail-caption { flex-direction: column; gap: 12px; }
+    .weight-studies { padding: 32px 20px; gap: 32px 0; }
+    .weight-study { max-width: 100%; flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">Kokoro Man</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#press">Press</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img class="hero-portrait" src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781189229/hero-4.jpg" alt="Sanker Ganesh in studio" id="hero-img">
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-name">
+      <span>Kokoro</span><br>
+      <span>Man</span>
+    </h1>
+    <p class="hero-sub">Sanker Ganesh &nbsp;·&nbsp; Figurative Painter &nbsp;·&nbsp; Kuala Lumpur</p>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- INTRO -->
+<div id="intro">
+  <p class="intro-text">
+    The figure is never simply a body. It is a <em>vessel for everything unsaid</em> — weight, desire, contradiction, the quiet pressure of being alive in a particular time and place. That is what Sanker Ganesh paints.
+  </p>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="work-header">
+    <div class="section-label">Selected Work</div>
+    <h2 class="work-title">Exhibitions</h2>
+  </div>
+
+  <!-- THE WEIGHT — UPCOMING -->
+  <div class="exhibition">
+    <div class="upcoming-card">
+      <div>
+        <div class="upcoming-label">Forthcoming Solo Exhibition</div>
+        <div class="upcoming-title">The Weight</div>
+        <div class="upcoming-date">Feb – May 2027 &nbsp;·&nbsp; Kuala Lumpur</div>
+      </div>
+      <div class="upcoming-desc">
+        <p>The Male Odyssey mapped a journey outward. The Weight maps what that journey left behind — in the body, in the posture, in the silence after.</p>
+        <p>Every human being carries something invisible. The Weight makes it visible — in paint, in posture, in the space between a figure and the ground that holds it. Three large oil on linen paintings trace a single figure through accumulation, suspension, and stillness.</p>
+        <p>This is not a new direction. It is the same man, further in.</p>
+      </div>
+    </div>
+
+    <!-- THE WEIGHT — Detail + Studies -->
+    <div class="weight-preview">
+
+      <!-- Detail crop -->
+      <div class="weight-detail" onclick="openLightboxWall(this)">
+        <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781255466/The-Weight-Leg2.jpg" alt="The Weight — detail">
+        <div class="weight-detail-caption">
+          <span class="weight-detail-label">In progress</span>
+          <span class="weight-detail-note">The body remembers what the mind has already moved past. This is where the painting begins — not at the face, but here, where weight actually lands.</span>
+        </div>
+      </div>
+
+      <!-- Studies -->
+      <div class="weight-studies-label">Three movements toward the final work</div>
+      <div class="weight-studies">
+
+        <div class="weight-study" onclick="openLightboxWall(this)">
+          <div class="wall-canvas">
+            <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781252242/Yield.jpg" alt="Yield">
+          </div>
+          <div class="wall-label">
+            <div class="wall-title">Yield</div>
+            <div class="wall-details">Study for The Weight &nbsp;·&nbsp; Oil on linen &nbsp;·&nbsp; 60 × 80 cm &nbsp;·&nbsp; 2026</div>
+          </div>
+        </div>
+
+        <div class="weight-study" onclick="openLightboxWall(this)">
+          <div class="wall-canvas">
+            <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781252022/Open.jpg" alt="Open">
+          </div>
+          <div class="wall-label">
+            <div class="wall-title">Open</div>
+            <div class="wall-details">Study for The Weight &nbsp;·&nbsp; Oil on linen &nbsp;·&nbsp; 60 × 80 cm &nbsp;·&nbsp; 2026</div>
+          </div>
+        </div>
+
+        <div class="weight-study" onclick="openLightboxWall(this)">
+          <div class="wall-canvas">
+            <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781252022/Leg-Study.jpg" alt="Sofa & Leg Study">
+          </div>
+          <div class="wall-label">
+            <div class="wall-title">Sofa &amp; Leg Study</div>
+            <div class="wall-details">Study for The Weight &nbsp;·&nbsp; Oil on linen &nbsp;·&nbsp; 60 × 80 cm &nbsp;·&nbsp; 2026</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- THE MALE ODYSSEY -->
+  <div class="exhibition">
+    <div class="exhibition-meta">
+      <div class="exhibition-name">The Male Odyssey</div>
+      <div class="exhibition-year">Solo III · 2025 · Artas Galeri, Kota Damansara</div>
+    </div>
+    <p class="exhibition-desc">
+      A reckoning with masculinity in motion. Twenty paintings following The Wanderer — a figure turning, reaching, collapsing inward, and rising again. The male body examined without mythology, without armour. Oil on linen, 2024–2025.
+    </p>
+    <div class="slider-wrap" id="odyssey-slider">
+      <div class="slider-track" id="odyssey-track">
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156642/Garden-Of-Reflection.jpg" alt="Garden Of Reflection" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Garden Of Reflection</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 157 × 167 cm &nbsp;·&nbsp; 2024</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156643/IMG_2516_wxmzr6.jpg" alt="The Screamer" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Screamer</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156671/The-Silence-One.jpg" alt="The Silence One" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Silence One</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156672/The-Endless-Pursuit.jpg" alt="The Endless Pursuit" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Endless Pursuit</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 152 × 160 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156673/The-Divine-Gesture.jpg" alt="The Divine Gesture" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Divine Gesture</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156674/Exhaustion.jpg" alt="Exhaustion" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Exhaustion</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156676/Long-Awaited-Rest.jpg" alt="Long Awaited Rest" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Long Awaited Rest</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156673/The-Stance.jpg" alt="The Stance" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Stance</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156674/The-Wanderer.jpg" alt="The Wanderer" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">The Wanderer</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156676/Embracing-Rest.jpg" alt="Embracing Rest" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Embracing Rest</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156709/In-The-Weight-Of-Stillness.jpg" alt="In The Weight Of Stillness" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">In The Weight Of Stillness</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156707/Rest-But-Not-Retreat.jpg" alt="Rest But Not Retreat" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Rest But Not Retreat</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156708/Surrendering-To-Soil.jpg" alt="Surrendering To Soil" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Surrendering To Soil</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156711/Where-Being-Ends-And-Dreaming-Begins.jpg" alt="Where Being Ends & Dreaming Begins" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Where Being Ends &amp; Dreaming Begins</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156710/Comfort-As-Camouflage.jpg" alt="Comfort As Camouflage" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Comfort As Camouflage</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 152 × 152 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156713/Rising-From-Blood-And-Soil.jpg" alt="Rising From Blood & Soil" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Rising From Blood &amp; Soil</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 160 × 160 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156714/Now-And-The-Not-Yet.jpg" alt="Now & The Not Yet" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Now &amp; The Not Yet</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 91 × 91 cm &nbsp;·&nbsp; 2025</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156301/Wild-Echoes.jpg" alt="Wild Echoes" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Wild Echoes</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 152 × 152 cm &nbsp;·&nbsp; 2024</div>
+          </div>
+        </div>
+
+        <div class="slide">
+          <div class="slide-img-wrap"><img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156641/Captains-Handbook.jpg" alt="Captains Handbook" onclick="openLightboxDirect(this)"></div>
+          <div class="slide-caption">
+            <div class="slide-title">Captains Handbook</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 183 × 213 cm &nbsp;·&nbsp; 2024</div>
+          </div>
+        </div>
+
+
+        <div class="slide">
+          <div class="slide-img-wrap" style="position:relative;">
+            <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156640/FragilityOfHappiness.jpg" alt="Fragility of Happiness" onclick="openLightboxDirect(this)">
+            <div style="position:absolute;top:16px;right:16px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bone);background:rgba(26,22,18,0.75);padding:6px 10px;">Sold</div>
+          </div>
+          <div class="slide-caption">
+            <div class="slide-title">Fragility of Happiness</div>
+            <div class="slide-details">Oil on linen &nbsp;·&nbsp; 122 × 152 cm &nbsp;·&nbsp; 2024 &nbsp;·&nbsp; <em style="color:var(--dim)">Private Collection</em></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" onclick="slideMove('odyssey', -1)">&#8592;</button>
+        <span class="slider-count" id="odyssey-count">1 / 20</span>
+        <button class="slider-btn" onclick="slideMove('odyssey', 1)">&#8594;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BODY LANGUAGE -->
+  <div class="exhibition" id="body-language">
+    <div class="exhibition-meta">
+      <div class="exhibition-name">Body Language</div>
+      <div class="exhibition-year">Solo II · 2023 · ZHAN Art Space, PJ</div>
+    </div>
+    <p class="exhibition-desc">
+      Fourteen paintings exploring the human figure in a world striving toward equality. Bold strokes, vivid colour — Bacon-like in subject but grounded in a distinctly Malaysian consciousness.
+    </p>
+    <div class="wall-gallery">
+      <div class="wall-piece" onclick="openLightboxWall(this)">
+        <div class="wall-canvas">
+          <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781170351/Shes-By-The-Carpet.jpg" alt="She's By The Carpet">
+        </div>
+        <div class="wall-label">
+          <div class="wall-title">She's By The Carpet</div>
+          <div class="wall-details">Oil on canvas &nbsp;·&nbsp; 208 × 183 cm &nbsp;·&nbsp; 2021</div>
+        </div>
+      </div>
+      <div class="wall-piece" onclick="openLightboxWall(this)">
+        <div class="wall-canvas">
+          <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781170353/Facing-My-Tradition.jpg" alt="Facing My Tradition">
+        </div>
+        <div class="wall-label">
+          <div class="wall-title">Facing My Tradition</div>
+          <div class="wall-details">Oil on canvas &nbsp;·&nbsp; 152 × 152 cm &nbsp;·&nbsp; 2023</div>
+        </div>
+      </div>
+      <div class="wall-piece" onclick="openLightboxWall(this)">
+        <div class="wall-canvas">
+          <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781170363/Little-Mans-Whisper-I.jpg" alt="Little Man's Whisper I">
+        </div>
+        <div class="wall-label">
+          <div class="wall-title">Little Man's Whisper I</div>
+          <div class="wall-details">Oil on canvas &nbsp;·&nbsp; 152 × 152 cm &nbsp;·&nbsp; 2023</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WAYANG -->
+  <div class="exhibition">
+    <div class="exhibition-meta">
+      <div class="exhibition-name">Wayang</div>
+      <div class="exhibition-year">Solo I · 2020 · Online Exhibition</div>
+    </div>
+    <p class="exhibition-desc">
+      The wayang — shadow puppet theatre — as metaphor for contemporary life. Mixed media and collage built from found material, oil pastel, image transfer and print production. Fourteen works asking: are we the true authors of our own thoughts?
+    </p>
+    <div class="wall-gallery">
+      <div class="wall-piece wall-piece--wide" onclick="openLightboxWall(this)">
+        <div class="wall-canvas wall-canvas--wide">
+          <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781170432/White-Dice-Pink-Head.jpg" alt="White Dice Pink Head">
+        </div>
+        <div class="wall-label">
+          <div class="wall-title">White Dice Pink Head</div>
+          <div class="wall-details">Mixed Media &nbsp;·&nbsp; 122 × 244 cm &nbsp;·&nbsp; 2019</div>
+        </div>
+      </div>
+      <div class="wall-piece" onclick="openLightboxWall(this)">
+        <div class="wall-canvas">
+          <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781170433/We-Are-Not-Born-Equal.jpg" alt="We Are Not Born Equal">
+        </div>
+        <div class="wall-label">
+          <div class="wall-title">We Are Not Born Equal</div>
+          <div class="wall-details">Mixed Media &nbsp;·&nbsp; 152 × 152 cm &nbsp;·&nbsp; 2020</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-image-wrap">
+    <img src="https://res.cloudinary.com/djgozyjvm/image/upload/v1781156936/hero.jpg" alt="Sanker Ganesh in studio" id="about-img" style="background:#d4cdc4;min-height:400px;">
+  </div>
+  <div class="about-content">
+    <div class="section-label">About</div>
+    <h2 class="about-name">Sanker Ganesh</h2>
+    <p class="about-bio">
+      Born 1980 in Selangor, Malaysia. Sanker Ganesh works in oil on linen under the name Kokoro Man — a Japanese word uniting heart, mind and spirit. He trained at Nagaoka University of Technology, Japan, graduating with a degree in Electrical and Electronic Engineering, before returning to Malaysia where a parallel life in art began to take shape.
+    </p>
+    <p class="about-bio">
+      His practice is semi-expressionist and figurative: the human body as site of psychological pressure, social negotiation, and quiet revelation. Colour functions as emotional temperature rather than description. Architectural mark-making follows the contour of muscle. The linen ground is used intentionally — open where it needs to breathe.
+    </p>
+    <div class="about-cv">
+      <div class="cv-section">
+        <div class="cv-label">Solo Exhibitions</div>
+        <div class="cv-item"><span class="cv-year">2027</span><span>The Weight — Kuala Lumpur (forthcoming)</span></div>
+        <div class="cv-item"><span class="cv-year">2025</span><span>The Male Odyssey — Artas Galeri, Kota Damansara</span></div>
+        <div class="cv-item"><span class="cv-year">2023</span><span>Body Language — ZHAN Art Space, Petaling Jaya</span></div>
+        <div class="cv-item"><span class="cv-year">2020</span><span>Wayang — Online Exhibition, Art Voice Gallery</span></div>
+      </div>
+      <div class="cv-section">
+        <div class="cv-label">Awards & Recognition</div>
+        <div class="cv-item"><span class="cv-year">2021</span><span>London Art Biennale — Gagliardi Gallery Award</span></div>
+        <div class="cv-item"><span class="cv-year">2020</span><span>Penang State Open — 2D Category Winner</span></div>
+        <div class="cv-item"><span class="cv-year">2018</span><span>Art Against AIDS — Jury's Pick, Professional Category</span></div>
+      </div>
+      <div class="cv-section">
+        <div class="cv-label">Selected Group Exhibitions</div>
+        <div class="cv-item"><span class="cv-year">2024</span><span>Facets — CIMB Artober Art &amp; Soul, MITEC Kuala Lumpur</span></div>
+        <div class="cv-item"><span class="cv-year">2024</span><span>Mastry — Tonyraka Art Gallery, Bali</span></div>
+        <div class="cv-item"><span class="cv-year">2023</span><span>Capturing The Moment — The Treasury Museum, Khon Kaen</span></div>
+        <div class="cv-item"><span class="cv-year">2023</span><span>The Emperor's New Clothes — Numaish Gah, Pakistan</span></div>
+        <div class="cv-item"><span class="cv-year">2021</span><span>London Art Biennale, London</span></div>
+        <div class="cv-item"><span class="cv-year">2020</span><span>Penang State Open</span></div>
+        <div class="cv-item"><span class="cv-year">2018</span><span>Art Against AIDS, Kuala Lumpur</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS -->
+<section id="press">
+  <div class="section-label">Press</div>
+  <h2 style="font-size:clamp(32px,5vw,60px);font-weight:normal;letter-spacing:-0.02em;margin-bottom:0">In the press</h2>
+  <div class="press-grid">
+    <div class="press-card">
+      <div class="press-pub">Tatler Malaysia</div>
+      <h3 class="press-headline">One Last Look: Facing My Tradition</h3>
+      <p class="press-excerpt">
+        An introspective confrontation between a man and his cultural traditions — the realities faced by modern people living in patriarchal Southeast Asia. "Having listened to the experiences of the women in my life, it made me rethink my values and stances on certain societal topics."
+      </p>
+      <div class="press-date">August 2025</div>
+    </div>
+    <div class="press-card">
+      <div class="press-pub">New Straits Times</div>
+      <h3 class="press-headline">Celebrating Malaysian Art</h3>
+      <p class="press-excerpt">
+        "I find great satisfaction in working with the human form. To me, it conveys so much about a person's state of being. My goal is to project that in my art. It's an evolving conversation between the brush, the canvas and my vision."
+      </p>
+      <div class="press-date">23 October 2024 · Lifestyle</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center">Contact</div>
+  <h2 class="contact-title">Enquire about<br>the <em>work</em></h2>
+  <a href="mailto:sanker.ganesh.art@gmail.com" class="contact-email">sanker.ganesh.art@gmail.com</a>
+  <div class="contact-social">
+    <a href="https://instagram.com/sankerg2020" target="_blank">Instagram</a>
+    <a href="https://facebook.com/sankerg2020" target="_blank">Facebook</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Sanker Ganesh · Kokoro Man</span>
+  <span>kokoro-man.com</span>
+</footer>
+
+<script>
+// Lightbox
+function openLightbox(el) {
+  const img = el.querySelector('img');
+  if (!img || !img.src || img.src.includes('data:')) return;
+  const caption = el.querySelector('.painting-title')?.textContent || '';
+  const details = el.querySelector('.painting-details')?.textContent || '';
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-caption').textContent = caption + (details ? ' — ' + details : '');
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// Slider — index-based, moves by 100% * slide index
+const sliders = {};
+function initSlider(id) {
+  const track = document.getElementById(id + '-track');
+  sliders[id] = { current: 0, total: track.children.length };
+  goToSlide(id, 0);
+}
+function goToSlide(id, index) {
+  const s = sliders[id];
+  const track = document.getElementById(id + '-track');
+  s.current = (index + s.total) % s.total;
+  track.style.transform = `translateX(-${s.current * 100}%)`;
+  document.getElementById(id + '-count').textContent = `${s.current + 1} / ${s.total}`;
+}
+function slideMove(id, dir) {
+  goToSlide(id, sliders[id].current + dir);
+}
+// Keyboard nav for slider
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') slideMove('odyssey', -1);
+  if (e.key === 'ArrowRight') slideMove('odyssey', 1);
+});
+// Touch/swipe support
+(function() {
+  const track = document.getElementById('odyssey-track');
+  let startX = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) slideMove('odyssey', diff > 0 ? 1 : -1);
+  });
+})();
+
+// Lightbox direct (for slider images)
+function openLightboxDirect(img) {
+  if (!img.src || img.src === window.location.href) return;
+  document.getElementById('lightbox-img').src = img.src;
+  const caption = img.closest('.slide')?.querySelector('.slide-title')?.textContent || '';
+  const details = img.closest('.slide')?.querySelector('.slide-details')?.textContent || '';
+  document.getElementById('lightbox-caption').textContent = caption + (details ? ' — ' + details : '');
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+
+function openLightboxWall(el) {
+  const img = el.querySelector('img');
+  const title = el.querySelector('.wall-title')?.textContent || '';
+  const details = el.querySelector('.wall-details')?.textContent || '';
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-caption').textContent = title + (details ? ' — ' + details : '');
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.addEventListener('DOMContentLoaded', () => { initSlider('odyssey'); });
+
+// Image loading instructions in console
+console.log('kokoro-man.com — To add images, replace the CLOUDINARY_ src attributes with your hosted image URLs.');
+</script>
+
+</body>
+</html>
