@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 const routes = {
   '/sitemap.xml': { file: 'sitemap.xml', type: 'application/xml; charset=utf-8' },
   '/robots.txt': { file: 'robots.txt', type: 'text/plain; charset=utf-8' },
+  '/email-confirmed': { file: 'email-confirmed.html', type: 'text/html; charset=utf-8' },
 };
 
 const server = http.createServer((req, res) => {
